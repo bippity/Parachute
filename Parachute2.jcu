@@ -15,22 +15,22 @@
 	</projects>
 	<open_files>
 		<docitem>
-			<path>src\MainFrame.java</path>
+			<path>src\ParachuteRunner.java</path>
 			<source>true</source>
 			<index>0</index>
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>src\MainMenu.java</path>
+			<path>src\HelpFrame.java</path>
 			<source>true</source>
 			<index>1</index>
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>src\GameFrame.java</path>
+			<path>src\Entities.java</path>
 			<source>true</source>
 			<index>2</index>
-			<active>false</active>
+			<active>true</active>
 		</docitem>
 		<docitem>
 			<path>src\GameComponent.java</path>
@@ -39,27 +39,9 @@
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>src\Entities.java</path>
-			<source>true</source>
-			<index>4</index>
-			<active>true</active>
-		</docitem>
-		<docitem>
-			<path>..\..\..\CompSci\Multithreading\Lab C\BubbleComponent.java</path>
-			<source>true</source>
-			<index>5</index>
-			<active>false</active>
-		</docitem>
-		<docitem>
-			<path>..\..\..\CompSci\Multithreading\Lab C\AnimationRunner.java</path>
-			<source>true</source>
-			<index>6</index>
-			<active>false</active>
-		</docitem>
-		<docitem>
 			<path>..\..\..\CompSci\Multithreading\Lab C\Bubble.java</path>
 			<source>true</source>
-			<index>7</index>
+			<index>4</index>
 			<active>false</active>
 		</docitem>
 	</open_files>

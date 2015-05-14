@@ -7,6 +7,10 @@
  import java.awt.event.*;
  import java.awt.Graphics;
  import javax.swing.*;
+ import java.awt.image.BufferedImage;
+ import javax.imageio.ImageIO;
+ import java.io.File;
+ import java.io.IOException;
  
  public class MainMenu extends JFrame implements ActionListener
  {
@@ -15,13 +19,16 @@
  	public JButton scoresButton = new JButton("Highscores");
  	
  	private JPanel southPanel = new JPanel();
- 	private JPanel northPanel = new JPanel();
- 	
+ 	private JPanel northPanel;
+ 	BufferedImage logo;
  	
  	public MainMenu()
  	{
  		setSize(500, 400);
  		setTitle("Parachute -Main Menu-");
+ 		
+ 		drawLogo();
+ 		add(northPanel, BorderLayout.CENTER);
  		
  		add(southPanel, BorderLayout.SOUTH);
  		southPanel.add(startButton, BorderLayout.WEST);
@@ -49,5 +56,25 @@
  			MainFrame main = new MainFrame();
  			dispose();
  		}
+ 	}
+ 	
+ 	public void drawLogo()
+ 	{
+ 		try
+ 		{
+ 			logo = ImageIO.read(new File("Logo.png"));
+ 		}
+ 		catch (Exception e)
+ 		{
+ 			e.printStackTrace();
+ 		}
+ 		northPanel = new JPanel(){
+ 			@Override
+ 				protected void paintComponent(Graphics g)
+ 				{
+ 					super.paintComponent(g);
+ 					g.drawImage(logo, 130, 50, null);
+ 				}
+ 		};
  	}
  }

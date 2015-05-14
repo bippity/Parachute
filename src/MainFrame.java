@@ -7,6 +7,7 @@
  import javax.swing.JMenu;
  import javax.swing.JMenuBar;
  import java.awt.event.*;
+ import java.io.IOException;
  
  public class MainFrame extends JFrame implements ActionListener
  {
@@ -16,6 +17,8 @@
  	
  	private GameComponent mainComponent;
  	private Timer timer = new Timer(100, this);
+ 	
+ 	private boolean paused;
  	
  	public MainFrame()
  	{
@@ -50,9 +53,28 @@
  				{
  					MainMenu mainMenu = new MainMenu();
  					dispose();
+ 					timer.stop();
+ 					timer = null;
  				}
  			});
  		menu.add(menuItem);
+ 		
+// 		menuItem = new JMenuItem("Pause/Unpause"); //won't pause after unpausing
+// 		menuItem.addActionListener(
+// 			new ActionListener()
+// 			{
+// 				public void actionPerformed(ActionEvent e)
+// 				{
+// 					if (paused)
+// 						timer.start();
+// 					else
+// 					{
+// 						paused = true;
+// 						timer.stop();
+// 					}
+// 				}
+// 			});
+// 		menu.add(menuItem);
  		
  	}
  	

@@ -5,6 +5,10 @@
  import java.awt.Graphics2D;
  import java.awt.geom.*;
  import javax.swing.JComponent;
+ import java.awt.image.BufferedImage;
+ import javax.imageio.ImageIO;
+ import java.io.File;
+ import java.util.Random;
  
  
  class Entity
@@ -13,10 +17,11 @@
  	Graphics2D g;
  	JComponent component;
  	
- 	public Entity(int X, int Y)
+ 	public Entity(int X, int Y, JComponent c)
  	{
  		x = X;
  		y = Y;
+ 		component = c;
  	}
  	
  	public void move()
@@ -36,6 +41,11 @@
  		g = null;
  		component = null;
  	}
+ 	
+ 	public void position()
+ 	{
+ 		System.out.println ("Position: " + x + ", " + y);
+ 	}
  }
  
  class Bullet extends Entity
@@ -43,9 +53,9 @@
  	int speedX;
  	int speedY;
  	
- 	public Bullet(int x, int y, int sX, int sY)
+ 	public Bullet(int x, int y, int sX, int sY, JComponent c)
  	{
- 		super(x,y);
+ 		super(x, y, c);
  		speedX = sX;
  		speedY = sY;
  		
@@ -78,34 +88,66 @@
  	boolean falling = false;
  	boolean dead = false;
  	boolean landed = false;
+ 	BufferedImage fallingImg, parachuteImg;
  	
- 	public Paratrooper(int x, int y, int s)
+ 	public Paratrooper(int x, int y, int s, JComponent c)
  	{
- 		super(x, y);
+ 		super(x, y, c);
+ 		Random rand = new Random();
+ 		this.x = rand.nextInt(600-parachuteImg.getWidth());
  		speed = s;
+ 		
+ 		try
+ 		{
+ 			parachuteImg = ImageIO.read(new File("Parachute.png"));
+ 			fallingImg = ImageIO.read(new File("Falling.png"));
+ 		}
+ 		catch (Exception e)
+ 		{
+ 			e.printStackTrace();
+ 		}
  	}
  	
  	public void move()
  	{
  		if (!dead)
  		{
- 			if (y >= g.getClipBounds().getHeight()) //if touches ground
+ 			if (y >= g.getClipBounds().getHeight()-parachuteImg.getHeight()) //if touches ground
  			{
  				if (falling)
  					dispose();
  				else
  				{
  					speed = 0;
+ 					y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
  					landed = true;
- 					return;
  				}
  			}
-	 		if (falling)
+	 		else if (falling)
 	 		{
 	 			speed = 3;
 	 		}
 	 		
-	 		y++;
+	 		y += speed;
+	 		component.repaint();
  		}
+ 	}
+ 	
+ 	public void draw(Graphics2D g2) //draws the actual image
+ 	{
+ 		g = g2;
+ 		
+ 		//check collision
+ 		if (landed)
+ 		{
+ 			g2.drawImage(fallingImg, x, y, null);
+ 		}
+ 		else
+ 			g2.drawImage(parachuteImg,x, y, null);
+ 	}
+ 	
+ 	public void position()
+ 	{
+ 		System.out.println ("Paratrooper's position: " + x + ", " + y);
  	}
  }
