@@ -15,13 +15,13 @@
 	</projects>
 	<open_files>
 		<docitem>
-			<path>src\ParachuteRunner.java</path>
+			<path>src\GameComponent.java</path>
 			<source>true</source>
 			<index>0</index>
-			<active>false</active>
+			<active>true</active>
 		</docitem>
 		<docitem>
-			<path>src\HelpFrame.java</path>
+			<path>src\MainFrame.java</path>
 			<source>true</source>
 			<index>1</index>
 			<active>false</active>
@@ -30,18 +30,6 @@
 			<path>src\Entities.java</path>
 			<source>true</source>
 			<index>2</index>
-			<active>true</active>
-		</docitem>
-		<docitem>
-			<path>src\GameComponent.java</path>
-			<source>true</source>
-			<index>3</index>
-			<active>false</active>
-		</docitem>
-		<docitem>
-			<path>..\..\..\CompSci\Multithreading\Lab C\Bubble.java</path>
-			<source>true</source>
-			<index>4</index>
 			<active>false</active>
 		</docitem>
 	</open_files>

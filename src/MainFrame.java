@@ -16,7 +16,7 @@
  	private JMenuItem menuItem;
  	
  	private GameComponent mainComponent;
- 	private Timer timer = new Timer(100, this);
+ 	public Timer timer = new Timer(1000, this);
  	
  	private boolean paused;
  	
@@ -28,7 +28,7 @@
  		constructMenu();
  		setJMenuBar(menuBar);
  		
- 		mainComponent = new GameComponent();
+ 		mainComponent = new GameComponent(this);
  		add(mainComponent);
  		
  		setDefaultCloseOperation(EXIT_ON_CLOSE);

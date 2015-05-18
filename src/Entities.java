@@ -64,13 +64,14 @@
  	
  	public void move()
  	{
- 		if (x <= 0 || x >= g.getClipBounds().getWidth() || y <= 0)
+ 		if (this.x <= 0 || this.x >= g.getClipBounds().getWidth() || this.y <= 0)
  		{
  			dispose(); //removes the bullet when out of bounds
  		}
  		else
  		{
- 			
+ 			this.x += speedX;
+ 			this.y += speedY;
  		}
  	}
  	
@@ -88,13 +89,11 @@
  	boolean falling = false;
  	boolean dead = false;
  	boolean landed = false;
- 	BufferedImage fallingImg, parachuteImg;
+ 	BufferedImage fallingImg, parachuteImg; //width = 40, height = 56
  	
  	public Paratrooper(int x, int y, int s, JComponent c)
  	{
  		super(x, y, c);
- 		Random rand = new Random();
- 		this.x = rand.nextInt(600-parachuteImg.getWidth());
  		speed = s;
  		
  		try
@@ -106,29 +105,88 @@
  		{
  			e.printStackTrace();
  		}
+ 		
+ 		this.y = -56;
+ 		
+ 		Random rand = new Random();	
+ 		int pos = rand.nextInt(15);
+ 		switch(pos)
+ 		{
+ 			case 0:
+ 				this.x = 0;
+ 				break;
+ 			case 1:
+ 				this.x = 40;
+ 				break;
+ 			case 2:
+ 				this.x = 80;
+ 				break;
+ 			case 3:
+ 				this.x = 120;
+ 				break;
+ 			case 4:
+ 				this.x = 160;
+ 				break;
+ 			case 5:
+ 				this.x = 200;
+ 				break;
+ 			case 6:
+ 				this.x = 240;
+ 				break;
+ 			case 7:
+ 				this.x = 280;
+ 				break;
+ 			case 8:
+ 				this.x = 320;
+ 				break;
+ 			case 9:
+ 				this.x = 360;
+ 				break;
+ 			case 10:
+ 				this.x = 400;
+ 				break;
+ 			case 11:
+ 				this.x = 440;
+ 				break;
+ 			case 12:
+ 				this.x = 480;
+ 				break;
+ 			case 13:
+ 				this.x = 520;
+ 				break;
+ 			case 14:
+ 				this.x = 480;
+ 				break;
+ 			default:
+ 				this.x = 0;
+ 				System.out.println (pos);
+ 		}
  	}
  	
  	public void move()
  	{
  		if (!dead)
  		{
- 			if (y >= g.getClipBounds().getHeight()-parachuteImg.getHeight()) //if touches ground
+ 			if (!landed)
  			{
- 				if (falling)
- 					dispose();
- 				else
- 				{
- 					speed = 0;
- 					y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
- 					landed = true;
- 				}
+	 			if (this.y >= g.getClipBounds().getHeight()-56)//parachuteImg.getHeight()) //if touches ground
+	 			{
+	 				if (falling)
+	 					dispose();
+	 				else
+	 				{
+	 					speed = 0;
+	 					this.y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
+	 					landed = true;
+	 					System.out.println ("landed");
+	 				}
+	 			}
+		 		else if (falling)
+		 		{
+		 			speed = 3;
+	 			}
+	 			this.y += speed;
  			}
-	 		else if (falling)
-	 		{
-	 			speed = 3;
-	 		}
-	 		
-	 		y += speed;
 	 		component.repaint();
  		}
  	}
