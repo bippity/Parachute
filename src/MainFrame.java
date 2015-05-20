@@ -4,6 +4,7 @@
  
  import java.awt.*;
  import javax.swing.*;
+ import javax.swing.border.*;
  import javax.swing.JMenu;
  import javax.swing.JMenuBar;
  import java.awt.event.*;
@@ -14,9 +15,11 @@
  	private JMenuBar menuBar;
  	private JMenu menu, subMenu;
  	private JMenuItem menuItem;
+ 	private JLabel scoreLabel = new JLabel("Score: 0");
+ 	private JPanel hud = new JPanel();
  	
  	private GameComponent mainComponent;
- 	public Timer timer = new Timer(1000, this);
+ 	public Timer timer = new Timer(10, this);
  	
  	private boolean paused;
  	
@@ -25,11 +28,17 @@
  		setSize(600, 500);
  		setTitle("Parachute");
  		
+ 		getContentPane().setBackground(Color.white);
+ 		
  		constructMenu();
  		setJMenuBar(menuBar);
  		
  		mainComponent = new GameComponent(this);
  		add(mainComponent);
+ 		
+// 		hud.setBorder(new TitledBorder("Something"));
+// 		hud.add(scoreLabel, BorderLayout.EAST);
+ 		add(scoreLabel, BorderLayout.NORTH);
  		
  		setDefaultCloseOperation(EXIT_ON_CLOSE);
  		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -91,5 +100,10 @@
  		{
  			mainComponent.update();
  		}
+ 	}
+ 	
+ 	public void setScore(int point)
+ 	{
+ 		scoreLabel.setText("Score: " + point);
  	}
  }

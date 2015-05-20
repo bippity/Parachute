@@ -15,9 +15,9 @@
  {
  	int x, y;
  	Graphics2D g;
- 	JComponent component;
+ 	GameComponent component;
  	
- 	public Entity(int X, int Y, JComponent c)
+ 	public Entity(int X, int Y, GameComponent c)
  	{
  		x = X;
  		y = Y;
@@ -38,8 +38,8 @@
  	{
  		x = 0;
  		y = 0;
- 		g = null;
- 		component = null;
+ 		//g = null;
+ 		//component = null;
  	}
  	
  	public void position()
@@ -53,7 +53,7 @@
  	int speedX;
  	int speedY;
  	
- 	public Bullet(int x, int y, int sX, int sY, JComponent c)
+ 	public Bullet(int x, int y, int sX, int sY, GameComponent c)
  	{
  		super(x, y, c);
  		speedX = sX;
@@ -87,11 +87,11 @@
  {
  	int speed; //falling speed
  	boolean falling = false;
- 	boolean dead = false;
  	boolean landed = false;
+ 	boolean dead = false;
  	BufferedImage fallingImg, parachuteImg; //width = 40, height = 56
  	
- 	public Paratrooper(int x, int y, int s, JComponent c)
+ 	public Paratrooper(int x, int y, int s, GameComponent c)
  	{
  		super(x, y, c);
  		speed = s;
@@ -169,21 +169,27 @@
  		{
  			if (!landed)
  			{
+ 				if (g == null) //why does this happen? Where is g instantialized...
+ 				{
+ 					return;
+ 				}
 	 			if (this.y >= g.getClipBounds().getHeight()-56)//parachuteImg.getHeight()) //if touches ground
 	 			{
-	 				if (falling)
-	 					dispose();
+	 				if (speed >= 9)
+	 					dead = true;
 	 				else
 	 				{
 	 					speed = 0;
 	 					this.y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
 	 					landed = true;
+	 					die();
+	 					dead = true;
 	 					System.out.println ("landed");
 	 				}
 	 			}
 		 		else if (falling)
 		 		{
-		 			speed = 3;
+		 			speed += 2; //speed increases as it falls. Dies if exceeds speed limit when hits ground.
 	 			}
 	 			this.y += speed;
  			}
@@ -207,5 +213,15 @@
  	public void position()
  	{
  		System.out.println ("Paratrooper's position: " + x + ", " + y);
+ 	}
+ 	
+ 	public void fall()
+ 	{
+ 		falling = !falling;
+ 	}
+ 	
+ 	public void die()
+ 	{
+ 		component.addPoint();
  	}
  }

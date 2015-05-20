@@ -20,6 +20,7 @@
  	private boolean initial = true;
  	private int delay;
  	int count = 0;
+ 	int score = 0;
  	private LinkedList<Entity> queue = new LinkedList<Entity>();
  	private ArrayList<Paratrooper> troop = new ArrayList<Paratrooper>(); //pop troops from queue into here
  	
@@ -44,13 +45,24 @@
  	{
  		count++;
  		System.out.println ("Updated " + count);
+ 		if (count >= Integer.MAX_VALUE)
+ 			count = 0;
  		
- 		generateEntities();
- 		
- 		for (Entity e : queue)
+ 		if (count % 10 == 0) //100ms
+ 		{	 		
+	 		for (Entity e : queue)
+	 		{
+//	 			if (e.dead)
+//	 			{
+//	 				queue.
+//	 			}
+//	 			else
+	 			e.move();
+	 		}
+ 		}
+ 		if (count % 125 == 0) //after 1250ms, generate another paratrooper
  		{
- 			if (e != null)
- 			e.move();
+ 			generateEntities();
  		}
  	}
  	
@@ -80,10 +92,10 @@
 // 			}
  		}
  		
- 		for (Entity e : queue)
- 		{
- 			e.position();
- 		}
+// 		for (Entity e : queue)
+// 		{
+// 			e.position();
+// 		}
  	}
  	
  	public void keyPressed(KeyEvent e) //space = 32, A = 65, D = 68, Left = 37, Right = 39
@@ -103,6 +115,11 @@
  			case 32:
  				//shoots
  				//frame.timer.stop();
+ 				for (Entity en : queue)
+ 				{
+ 					Paratrooper p = (Paratrooper)en;
+ 					p.fall();
+ 				}
  				break;
  		}
  	}
@@ -112,5 +129,11 @@
  	}
  	public void keyTyped(KeyEvent e)
  	{
+ 	}
+ 	
+ 	public void addPoint()
+ 	{
+ 		score++;
+ 		frame.setScore(score);
  	}
  }
