@@ -3,20 +3,21 @@
  */
  
  import java.awt.*;
- import javax.swing.*;
- import javax.swing.border.*;
- import javax.swing.JMenu;
- import javax.swing.JMenuBar;
- import java.awt.event.*;
- import java.io.IOException;
+
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+
+import java.awt.event.*;
  
- public class MainFrame extends JFrame implements ActionListener
+ @SuppressWarnings("serial")
+public class MainFrame extends JFrame implements ActionListener
  {
  	private JMenuBar menuBar;
- 	private JMenu menu, subMenu;
+ 	private JMenu menu;
  	private JMenuItem menuItem;
  	private JLabel scoreLabel = new JLabel("Score: 0");
- 	private JPanel hud = new JPanel();
  	
  	private GameComponent mainComponent;
  	public Timer timer = new Timer(10, this);
@@ -36,8 +37,6 @@
  		mainComponent = new GameComponent(this);
  		add(mainComponent);
  		
-// 		hud.setBorder(new TitledBorder("Something"));
-// 		hud.add(scoreLabel, BorderLayout.EAST);
  		add(scoreLabel, BorderLayout.NORTH);
  		
  		setDefaultCloseOperation(EXIT_ON_CLOSE);

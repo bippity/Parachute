@@ -24,7 +24,6 @@
  	private LinkedList<Entity> queue = new LinkedList<Entity>();
  	private ArrayList<Paratrooper> troop = new ArrayList<Paratrooper>(); //pop troops from queue into here
  	
- 	private BufferedImage falling, parachute;
  	
  	public GameComponent(MainFrame m) //constructor
  	{
@@ -49,27 +48,42 @@
  			count = 0;
  		
  		if (count % 10 == 0) //100ms
- 		{	 		
+ 		{	
+ 			int index = 0;
 	 		for (Entity e : queue)
 	 		{
-//	 			if (e.dead)
+	 			index++;
+	 			if (e.dead)
+	 			{
+	 				System.out.println("DEAD");
+	 				queue.remove(e);
+	 			}
+	 			else
+	 			{
+	 				if (e != null)
+	 					e.move();
+	 			}
+	 			
+//	 			for (Entity en : queue)
 //	 			{
-//	 				queue.
+//	 				if ()
 //	 			}
-//	 			else
-	 			e.move();
 	 		}
  		}
  		if (count % 125 == 0) //after 1250ms, generate another paratrooper
  		{
  			generateEntities();
  		}
+ 		
+ 		System.out.println(queue.size());
  	}
  	
  	public void paintComponent(Graphics g)
  	{
  		Graphics2D g2 = (Graphics2D) g;
-
+ 		
+ 		
+ 		
  		for (Entity e : queue)
  		{
  			e.draw(g2);
@@ -81,7 +95,7 @@
  		if (queue.size() < 15)
  		{
  			if (count % 5 == 0)
- 				queue.add(new Paratrooper(0, 0 , 5, this));
+ 				queue.add(new Paratrooper(0, 0, this));
 // 			Random rand = new Random();
 // 			int temp = rand.nextInt(10) + 1;
 // 			
@@ -135,5 +149,15 @@
  	{
  		score++;
  		frame.setScore(score);
+ 	}
+ 	
+ 	public LinkedList<Entity> getQueue()
+ 	{
+ 		return queue;
+ 	}
+ 	
+ 	public void removeTroop(Paratrooper p)
+ 	{
+ 		queue.remove(p);
  	}
  }

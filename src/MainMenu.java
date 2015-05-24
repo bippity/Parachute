@@ -28,12 +28,14 @@
  		setTitle("Parachute -Main Menu-");
  		
  		drawLogo();
+ 		northPanel.setBackground(Color.white);
  		add(northPanel, BorderLayout.CENTER);
  		
  		add(southPanel, BorderLayout.SOUTH);
  		southPanel.add(startButton, BorderLayout.WEST);
  		southPanel.add(helpButton, BorderLayout.EAST);
  		southPanel.add(scoresButton);
+ 		southPanel.setBackground(Color.white);
  		
  		startButton.addActionListener(this);
  		helpButton.addActionListener(this);

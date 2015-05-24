@@ -4,6 +4,7 @@
  
  import java.awt.Graphics2D;
  import java.awt.geom.*;
+ import java.awt.Rectangle;
  import javax.swing.JComponent;
  import java.awt.image.BufferedImage;
  import javax.imageio.ImageIO;
@@ -16,6 +17,7 @@
  	int x, y;
  	Graphics2D g;
  	GameComponent component;
+ 	boolean dead = false;
  	
  	public Entity(int X, int Y, GameComponent c)
  	{
@@ -46,6 +48,11 @@
  	{
  		System.out.println ("Position: " + x + ", " + y);
  	}
+ 	
+ 	public Rectangle getBounds()
+ 	{
+ 		return new Rectangle(x, y, 0, 0);
+ 	}
  }
  
  class Bullet extends Entity
@@ -53,9 +60,9 @@
  	int speedX;
  	int speedY;
  	
- 	public Bullet(int x, int y, int sX, int sY, GameComponent c)
+ 	public Bullet(int X, int Y, int sX, int sY, GameComponent c)
  	{
- 		super(x, y, c);
+ 		super(X, Y, c);
  		speedX = sX;
  		speedY = sY;
  		
@@ -64,14 +71,14 @@
  	
  	public void move()
  	{
- 		if (this.x <= 0 || this.x >= g.getClipBounds().getWidth() || this.y <= 0)
+ 		if (x <= 0 || x >= g.getClipBounds().getWidth() || y <= 0)
  		{
  			dispose(); //removes the bullet when out of bounds
  		}
  		else
  		{
- 			this.x += speedX;
- 			this.y += speedY;
+ 			x += speedX;
+ 			y += speedY;
  		}
  	}
  	
@@ -85,16 +92,18 @@
  
  class Paratrooper extends Entity 
  {
- 	int speed; //falling speed
+ 	int speed; //falling speed, random
  	boolean falling = false;
  	boolean landed = false;
- 	boolean dead = false;
  	BufferedImage fallingImg, parachuteImg; //width = 40, height = 56
  	
- 	public Paratrooper(int x, int y, int s, GameComponent c)
+ 	public Paratrooper(int X, int Y, GameComponent c)
  	{
- 		super(x, y, c);
- 		speed = s;
+ 		super(X, Y, c);
+ 		
+ 		dead = false;
+ 		Random rand = new Random();
+ 		speed = rand.nextInt(4)+3; //random speed between 3-7
  		
  		try
  		{
@@ -106,59 +115,58 @@
  			e.printStackTrace();
  		}
  		
- 		this.y = -56;
+ 		y = -56;
  		
- 		Random rand = new Random();	
  		int pos = rand.nextInt(15);
  		switch(pos)
  		{
  			case 0:
- 				this.x = 0;
+ 				x = 0;
  				break;
  			case 1:
- 				this.x = 40;
+ 				x = 40;
  				break;
  			case 2:
- 				this.x = 80;
+ 				x = 80;
  				break;
  			case 3:
- 				this.x = 120;
+ 				x = 120;
  				break;
  			case 4:
- 				this.x = 160;
+ 				x = 160;
  				break;
  			case 5:
- 				this.x = 200;
+ 				x = 200;
  				break;
  			case 6:
- 				this.x = 240;
+ 				x = 240;
  				break;
  			case 7:
- 				this.x = 280;
+ 				x = 280;
  				break;
  			case 8:
- 				this.x = 320;
+ 				x = 320;
  				break;
  			case 9:
- 				this.x = 360;
+ 				x = 360;
  				break;
  			case 10:
- 				this.x = 400;
+ 				x = 400;
  				break;
  			case 11:
- 				this.x = 440;
+ 				x = 440;
  				break;
  			case 12:
- 				this.x = 480;
+ 				x = 480;
  				break;
  			case 13:
- 				this.x = 520;
+ 				x = 520;
  				break;
  			case 14:
- 				this.x = 480;
+ 				x = 480;
  				break;
  			default:
- 				this.x = 0;
+ 				x = 0;
  				System.out.println (pos);
  		}
  	}
@@ -173,26 +181,58 @@
  				{
  					return;
  				}
-	 			if (this.y >= g.getClipBounds().getHeight()-56)//parachuteImg.getHeight()) //if touches ground
+ 				
+ 				for (Entity e : component.getQueue())
+ 				{
+ 					if (e instanceof Paratrooper)
+ 					{
+ 						Paratrooper p = (Paratrooper) e;
+ 						
+	 					if (getBounds().intersects(p.getBounds()) && this != p) //checks against other entities excluding itself
+	 					{
+	 						if (p.landed)
+	 						{
+	 							if (speed >= 7)
+	 							{
+	 								p.die();
+	 								die();
+	 							}
+	 							else
+	 							{
+	 								land();
+	 								y = p.y - 35;
+	 							}
+	 						}
+	 						else
+	 							p.fall();
+	 					}
+ 					}
+ 				}
+ 				
+	 			if (y >= g.getClipBounds().getHeight()-52)//parachuteImg.getHeight()) //if touches ground
 	 			{
-	 				if (speed >= 9)
-	 					dead = true;
-	 				else
+	 				if (speed >= 7)
 	 				{
-	 					speed = 0;
-	 					this.y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
-	 					landed = true;
 	 					die();
-	 					dead = true;
-	 					System.out.println ("landed");
+	 				}
+	 				else //landed safely
+	 				{
+	 					land();
+	 					y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
+	 					//System.out.println ("landed");
 	 				}
 	 			}
 		 		else if (falling)
 		 		{
+		 			if (speed <= 10)
 		 			speed += 2; //speed increases as it falls. Dies if exceeds speed limit when hits ground.
 	 			}
-	 			this.y += speed;
+	 			y += speed;
  			}
+ 			
+ 			if (dead)
+ 				return;
+ 			
 	 		component.repaint();
  		}
  	}
@@ -202,7 +242,7 @@
  		g = g2;
  		
  		//check collision
- 		if (landed)
+ 		if (landed || falling)
  		{
  			g2.drawImage(fallingImg, x, y, null);
  		}
@@ -217,11 +257,24 @@
  	
  	public void fall()
  	{
- 		falling = !falling;
+ 		falling = true;
+ 	}
+ 	
+ 	public void land()
+ 	{
+ 		speed = 0;
+ 		landed = true;
  	}
  	
  	public void die()
  	{
+ 		dead = true;
  		component.addPoint();
+ 		//dispose();
+ 	}
+ 	
+ 	public Rectangle getBounds()
+ 	{
+ 		return new Rectangle(x, y, 40, 56);
  	}
  }
