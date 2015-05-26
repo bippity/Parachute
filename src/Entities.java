@@ -2,14 +2,19 @@
  *Entities.java
  */
  
- import java.awt.Graphics2D;
- import java.awt.geom.*;
- import java.awt.Rectangle;
- import javax.swing.JComponent;
- import java.awt.image.BufferedImage;
- import javax.imageio.ImageIO;
- import java.io.File;
- import java.util.Random;
+ import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.*;
+import java.awt.Rectangle;
+
+import javax.swing.JComponent;
+
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+
+import java.io.File;
+import java.util.Random;
  
  
  class Entity
@@ -36,17 +41,14 @@
  		
  	}
  	
- 	public void dispose()
- 	{
- 		x = 0;
- 		y = 0;
- 		//g = null;
- 		//component = null;
- 	}
- 	
- 	public void position()
+ 	public void position() //debug. Prints the Entity's position
  	{
  		System.out.println ("Position: " + x + ", " + y);
+ 	}
+ 	
+ 	public void die()
+ 	{
+ 		//overwrite
  	}
  	
  	public Rectangle getBounds()
@@ -59,34 +61,88 @@
  {
  	int speedX;
  	int speedY;
+	int speed = 5;
+	int angle;
+	int slope;
+ 	int diameter = 10;
  	
- 	public Bullet(int X, int Y, int sX, int sY, GameComponent c)
+ 	public Bullet(int X, int Y, int a, GameComponent c)
  	{
  		super(X, Y, c);
- 		speedX = sX;
- 		speedY = sY;
- 		
- 		
+ 		angle = a;
  	}
  	
  	public void move()
  	{
- 		if (x <= 0 || x >= g.getClipBounds().getWidth() || y <= 0)
+ 		/*if (x <= 0 || x >= g.getClipBounds().getWidth() || y <= 0)
  		{
- 			dispose(); //removes the bullet when out of bounds
+ 			//dispose(); //removes the bullet when out of bounds
  		}
  		else
  		{
  			x += speedX;
  			y += speedY;
+ 		}*/
+ 		
+ 		if (dead)
+ 			return;
+ 		
+		if (g == null)
+			return;
+		
+ 		if (angle == 90)
+ 		{
+ 			y--;
+ 			//System.out.println(y);
  		}
+ 		else 
+ 		{
+ 			double radian = Math.toRadians(angle);
+ 			slope = (int)Math.tan(radian);
+ 			if (angle > 90)
+ 			{
+ 				x--;
+ 			}
+ 			else 
+ 			{
+				x++;
+			}
+			y += slope;
+		}
+ 		
+ 		component.repaint();
+ 		
+ 		for (Entity e : component.getQueue())
+			{
+				if (e instanceof Paratrooper)
+				{
+					Paratrooper p = (Paratrooper) e;
+					
+					if (getBounds().intersects(p.getBounds())) //checks against other entities excluding itself
+					{
+							p.die();
+					}
+				}
+			}
  	}
  	
- 	public void dispose()
+ 	public void draw(Graphics2D g2)
  	{
- 		super.dispose();
- 		speedX = 0;
- 		speedY = 0;
+ 		g = g2;
+ 		
+ 		Ellipse2D bullet = new Ellipse2D.Double(x, y, diameter, diameter);
+ 		g.setColor(Color.black);
+ 		g.fill(bullet);
+ 	}
+ 	
+ 	public void die()
+ 	{
+ 		
+ 	}
+ 	
+ 	public Rectangle getBounds()
+ 	{
+ 		return new Rectangle(x, y, diameter, diameter);
  	}
  }
  
