@@ -2,13 +2,9 @@
  *Entities.java
  */
  
- import java.awt.Color;
-import java.awt.Graphics2D;
+ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.Rectangle;
-
-import javax.swing.JComponent;
-
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -59,17 +55,19 @@ import java.util.Random;
  
  class Bullet extends Entity
  {
- 	int speedX;
- 	int speedY;
-	int speed = 5;
+ 	double speedX;
+ 	double speedY;
 	int angle;
-	int slope;
+	int hyp = 15; //hypotenuse - distance the bullet travels per update
  	int diameter = 10;
  	
  	public Bullet(int X, int Y, int a, GameComponent c)
  	{
  		super(X, Y, c);
  		angle = a;
+ 		double radian = Math.toRadians(angle);
+ 		speedX = hyp * Math.cos(radian);
+ 		speedY = hyp * Math.sin(radian);
  	}
  	
  	public void move()
@@ -83,33 +81,27 @@ import java.util.Random;
  			x += speedX;
  			y += speedY;
  		}*/
+ 		if (g == null)
+			return;
+ 		
+ 		if (y < -10)
+ 			die();
+ 		if (x < -10 || x > g.getClipBounds().getWidth())
+ 			die();
  		
  		if (dead)
  			return;
- 		
-		if (g == null)
-			return;
 		
  		if (angle == 90)
  		{
- 			y--;
- 			//System.out.println(y);
+ 			y -= speedY;
  		}
  		else 
  		{
- 			double radian = Math.toRadians(angle);
- 			slope = (int)Math.tan(radian);
- 			if (angle > 90)
- 			{
- 				x--;
- 			}
- 			else 
- 			{
-				x++;
-			}
-			y += slope;
+ 			x = (int)(x + speedX);
+			y = (int)(y - speedY);
 		}
- 		
+ 		System.out.println ("(" + x + ", " + y + ")");
  		component.repaint();
  		
  		for (Entity e : component.getQueue())
@@ -137,7 +129,7 @@ import java.util.Random;
  	
  	public void die()
  	{
- 		
+ 		dead = true;
  	}
  	
  	public Rectangle getBounds()
@@ -157,7 +149,6 @@ import java.util.Random;
  	{
  		super(X, Y, c);
  		
- 		dead = false;
  		Random rand = new Random();
  		speed = rand.nextInt(4)+3; //random speed between 3-7
  		
@@ -275,7 +266,12 @@ import java.util.Random;
 	 				{
 	 					land();
 	 					y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
-	 					//System.out.println ("landed");
+	 					
+	 					if (x >= 200 && x <= 400) //if it lands on tank
+	 					{
+	 						component.dispose();
+	 						System.out.println("GAME OVER!");
+	 					}
 	 				}
 	 			}
 		 		else if (falling)
@@ -326,11 +322,41 @@ import java.util.Random;
  	{
  		dead = true;
  		component.addPoint();
- 		//dispose();
  	}
  	
  	public Rectangle getBounds()
  	{
  		return new Rectangle(x, y, 40, 56);
  	}
+ }
+ 
+ 
+ class Tank extends Entity
+ {
+	Shape test;
+	Ellipse2D body = new Ellipse2D.Double(200, 390, 200, 100);
+	int radius = 25;
+	
+	public Tank(int X, int Y, GameComponent c) 
+	{
+		super(X, Y, c);
+	}
+	
+	public void move(int angle)
+	{
+		Rectangle2D rect = new Rectangle2D.Double(100, 100, 20, 200);
+		//Ellipse2D circ = new Ellipse2D.Double(100, 100, 50, 50);
+		AffineTransform at = AffineTransform.getRotateInstance(angle, 150, 150);
+		test = at.createTransformedShape(rect);
+		
+		component.repaint();
+	}
+	
+	public void draw(Graphics2D g2)
+	{
+		g = g2;
+		//g2.setColor(Color.black);
+		g2.fill(body);
+		g2.fill(test);
+	}
  }

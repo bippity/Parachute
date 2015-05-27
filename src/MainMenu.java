@@ -4,15 +4,19 @@
  */
  
  import java.awt.*;
- import java.awt.event.*;
- import java.awt.Graphics;
- import javax.swing.*;
- import java.awt.image.BufferedImage;
- import javax.imageio.ImageIO;
- import java.io.File;
- import java.io.IOException;
+import java.awt.event.*;
+import java.awt.Graphics;
+
+import javax.swing.*;
+
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+
+import java.io.File;
  
- public class MainMenu extends JFrame implements ActionListener
+ @SuppressWarnings("serial")
+public class MainMenu extends JFrame implements ActionListener
  {
  	public JButton startButton = new JButton("Start");
  	public JButton helpButton = new JButton("Instructions");
@@ -44,11 +48,12 @@
  		
  		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
  		setLocation(dim.width/2-getSize().width/2, dim.height/2-getSize().height/2);
- 		
+ 		setResizable(false);
  		setVisible(true);
  	}
  	
- 	public void actionPerformed(ActionEvent e)
+ 	@SuppressWarnings("unused")
+	public void actionPerformed(ActionEvent e)
  	{
  		if (helpButton.equals(e.getSource()))
  		{

@@ -5,9 +5,6 @@
  import java.awt.*;
 
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 
 import java.awt.event.*;
  
@@ -18,11 +15,11 @@ public class MainFrame extends JFrame implements ActionListener
  	private JMenu menu;
  	private JMenuItem menuItem;
  	private JLabel scoreLabel = new JLabel("Score: 0");
+ 	private JLabel queueLabel = new JLabel("Queue Size: 0");//temp
  	
  	private GameComponent mainComponent;
  	public Timer timer = new Timer(10, this);
  	
- 	private boolean paused;
  	
  	public MainFrame()
  	{
@@ -38,10 +35,12 @@ public class MainFrame extends JFrame implements ActionListener
  		add(mainComponent);
  		
  		add(scoreLabel, BorderLayout.NORTH);
+ 		add(queueLabel, BorderLayout.LINE_END);//temp
  		
  		setDefaultCloseOperation(EXIT_ON_CLOSE);
  		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
  		setLocation(dim.width/2-getSize().width/2, dim.height/2-getSize().height/2);
+ 		setResizable(false);
  		setVisible(true);
  		
  		start();
@@ -59,10 +58,7 @@ public class MainFrame extends JFrame implements ActionListener
  			{
  				public void actionPerformed(ActionEvent e)
  				{
- 					MainMenu mainMenu = new MainMenu();
- 					dispose();
- 					timer.stop();
- 					timer = null;
+ 					returnToMenu();
  				}
  			});
  		menu.add(menuItem);
@@ -104,5 +100,19 @@ public class MainFrame extends JFrame implements ActionListener
  	public void setScore(int point)
  	{
  		scoreLabel.setText("Score: " + point);
+ 	}
+ 	
+ 	public void setQueue(int size)
+ 	{
+ 		queueLabel.setText("Queue Size: " + size);
+ 	}
+ 	
+ 	@SuppressWarnings("unused")
+	public void returnToMenu()
+ 	{
+ 		MainMenu menu = new MainMenu();
+ 		timer.stop();
+ 		timer = null;
+ 		dispose();
  	}
  }
