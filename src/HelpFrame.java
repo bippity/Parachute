@@ -42,11 +42,12 @@ public class HelpFrame extends JFrame
 			String gameplay =
 					"You are a turret defending your turf against the invasion of stickmen. "
 					+ "Shoot down as many paratroopers as you can before your land becomes invaded."
+					+ "<br>Firing a bullet deducts a point from your score, hitting a paratrooper adds a point."
 					+ "<br>If 5 paratroopers land or a paratrooper lands on you, then it's game over!";
 			html += gameplay;
 
 	 		JEditorPane ed = new JEditorPane("text/html", html);
-	 		
+	 		ed.setEditable(false);
 	 		add(ed);
 	 		setVisible(true);
 	 		

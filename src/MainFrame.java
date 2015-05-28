@@ -15,7 +15,7 @@ public class MainFrame extends JFrame implements ActionListener
  	private JMenu menu;
  	private JMenuItem menuItem;
  	private JLabel scoreLabel = new JLabel("Score: 0");
- 	private JLabel queueLabel = new JLabel("Queue Size: 0");//temp
+ 	//private JLabel queueLabel = new JLabel("Queue Size: 0");//debug
  	
  	private GameComponent mainComponent;
  	public Timer timer = new Timer(10, this);
@@ -35,7 +35,7 @@ public class MainFrame extends JFrame implements ActionListener
  		add(mainComponent);
  		
  		add(scoreLabel, BorderLayout.NORTH);
- 		add(queueLabel, BorderLayout.LINE_END);//temp
+ 		//add(queueLabel, BorderLayout.LINE_END);//debug
  		
  		setDefaultCloseOperation(EXIT_ON_CLOSE);
  		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -52,7 +52,7 @@ public class MainFrame extends JFrame implements ActionListener
  		menu = new JMenu("Menu");
  		menuBar.add(menu);
  		
- 		menuItem = new JMenuItem("Main Menu");
+ 		menuItem = new JMenuItem("Main Menu (Esc)");
  		menuItem.addActionListener(
  			new ActionListener()
  			{
@@ -62,24 +62,6 @@ public class MainFrame extends JFrame implements ActionListener
  				}
  			});
  		menu.add(menuItem);
- 		
-// 		menuItem = new JMenuItem("Pause/Unpause"); //won't pause after unpausing
-// 		menuItem.addActionListener(
-// 			new ActionListener()
-// 			{
-// 				public void actionPerformed(ActionEvent e)
-// 				{
-// 					if (paused)
-// 						timer.start();
-// 					else
-// 					{
-// 						paused = true;
-// 						timer.stop();
-// 					}
-// 				}
-// 			});
-// 		menu.add(menuItem);
- 		
  	}
  	
  	public void start() //starts everything
@@ -102,16 +84,20 @@ public class MainFrame extends JFrame implements ActionListener
  		scoreLabel.setText("Score: " + point);
  	}
  	
- 	public void setQueue(int size)
+ 	/*public void setQueue(int size) //debug
  	{
  		queueLabel.setText("Queue Size: " + size);
- 	}
+ 	}*/
  	
  	@SuppressWarnings("unused")
 	public void returnToMenu()
  	{
  		MainMenu menu = new MainMenu();
- 		timer.stop();
+ 		exit();
+ 	}
+ 	
+ 	public void exit()
+ 	{
  		timer = null;
  		dispose();
  	}

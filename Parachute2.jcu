@@ -11,6 +11,10 @@
 			<folderitem>
 				<path>src</path>
 			</folderitem>
+			<fileitem>
+				<path>src\Entities.java</path>
+				<collapsedfolds>0;0;136;131</collapsedfolds>
+			</fileitem>
 		</project>
 	</projects>
 	<open_files>
@@ -21,22 +25,22 @@
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>src\ParachuteRunner.java</path>
+			<path>src\GameComponent.java</path>
 			<source>true</source>
 			<index>1</index>
 			<active>false</active>
 		</docitem>
 		<docitem>
-			<path>src\MainFrame.java</path>
+			<path>src\ScoreFrame.java</path>
 			<source>true</source>
 			<index>2</index>
-			<active>false</active>
+			<active>true</active>
 		</docitem>
 		<docitem>
-			<path>src\GameComponent.java</path>
+			<path>src\MainMenu.java</path>
 			<source>true</source>
 			<index>3</index>
-			<active>true</active>
+			<active>false</active>
 		</docitem>
 	</open_files>
 </workspace_user>

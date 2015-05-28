@@ -40,10 +40,6 @@
 				<folder>src</folder>
 			</fileitem>
 			<fileitem>
-				<path>src\GameFrame.java</path>
-				<folder>src</folder>
-			</fileitem>
-			<fileitem>
 				<path>src\HelpFrame.java</path>
 				<folder>src</folder>
 			</fileitem>
@@ -57,6 +53,10 @@
 			</fileitem>
 			<fileitem>
 				<path>src\ParachuteRunner.java</path>
+				<folder>src</folder>
+			</fileitem>
+			<fileitem>
+				<path>src\ScoreFrame.java</path>
 				<folder>src</folder>
 			</fileitem>
 		</include>

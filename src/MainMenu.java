@@ -43,6 +43,7 @@ public class MainMenu extends JFrame implements ActionListener
  		
  		startButton.addActionListener(this);
  		helpButton.addActionListener(this);
+ 		scoresButton.addActionListener(this);
  		
  		setDefaultCloseOperation(EXIT_ON_CLOSE);
  		
@@ -63,6 +64,11 @@ public class MainMenu extends JFrame implements ActionListener
  		{
  			MainFrame main = new MainFrame();
  			dispose();
+ 		}
+ 		else if (scoresButton.equals(e.getSource()))
+ 		{
+ 			ScoreFrame main = new ScoreFrame();
+ 			main.start();
  		}
  	}
  	

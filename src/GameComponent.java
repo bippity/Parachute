@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.JComponent;
+import javax.swing.*;
 
 import java.util.*;
  
@@ -20,8 +21,9 @@ public class GameComponent extends JComponent implements KeyListener
  	int score = 0;
  	private LinkedList<Entity> queue = new LinkedList<Entity>();
  	private ArrayList<Entity> removeList = new ArrayList<Entity>();
+ 	private int landed = 0;
  	
- 	private Tank tank = new Tank(200, 400, this);
+ 	private Turret turret = new Turret(200, 400, this);
  	
  	
  	public GameComponent(MainFrame m) //constructor
@@ -33,8 +35,8 @@ public class GameComponent extends JComponent implements KeyListener
  	
  	public void start()
  	{
- 		//draw the tank first
- 		updateTank();
+ 		//draw the turret first
+ 		updateTurret(0);
  		//generate the paratroopers
  		generateEntities();
  	}
@@ -45,8 +47,6 @@ public class GameComponent extends JComponent implements KeyListener
  		//System.out.println ("Updated " + count);
  		if (count >= Integer.MAX_VALUE)
  			count = 0;
- 		
- 		updateTank();
  		
  		if (count % 10 == 0) //100ms
  		{	
@@ -74,14 +74,14 @@ public class GameComponent extends JComponent implements KeyListener
  		}
  		removeList.clear();
  		
- 		frame.setQueue(queue.size());//TEMP
+ 		//frame.setQueue(landed);//Debug
  	}
  	
  	public void paintComponent(Graphics g)
  	{
  		Graphics2D g2 = (Graphics2D) g;
  		
- 		tank.draw(g2);
+ 		turret.draw(g2);
  		for (Entity e : queue)
  		{
  			e.draw(g2);
@@ -105,28 +105,29 @@ public class GameComponent extends JComponent implements KeyListener
  		{
  			case 65:
  			case 37:
- 				//moves tank left - increase angle
+ 				//moves turret left - increase angle
  				if (angle < 180)
+ 				{
  					angle += 15;
+ 					updateTurret(-15);
+ 				}
  				System.out.println("Angle: " + angle);
  				break;
  				
  			case 68:
  			case 39:
- 				//moves tank right
+ 				//moves turret right
  				if (angle > 0)
+ 				{
  					angle -= 15;
+ 					updateTurret(15);
+ 				}
  				System.out.println("Angle: " + angle);
  				break;
  				
  			case 32:
  				//shoots
- 				/*if (angle < 0)
- 					angle = 0;
- 				if (angle > 180)
- 					angle = 180;*/ //shouldn't be needed
- 				
- 				queue.add(new Bullet(300, 350, angle, this));
+ 				queue.add(new Bullet(turret.getBarrelX(), turret.getBarrelY(), angle, this));
  				deductPoint();
  				break;
  				
@@ -149,12 +150,26 @@ public class GameComponent extends JComponent implements KeyListener
  		frame.setScore(score);
  	}
  	
+ 	public void addLanded()
+ 	{
+ 		landed++;
+ 		if (landed == 5)
+ 		{
+ 			endGame();
+ 		}
+ 	}
+ 	
  	public void deductPoint()
  	{
  		if (score > 0)
  			score--;
  		
  		frame.setScore(score);
+ 	}
+ 	
+ 	public void deductLanded()
+ 	{
+ 		landed--;
  	}
  	
  	public LinkedList<Entity> getQueue()
@@ -167,9 +182,9 @@ public class GameComponent extends JComponent implements KeyListener
  		queue.remove(p);
  	}
  	
- 	public void updateTank()
+ 	public void updateTurret(int amount)
  	{
- 		tank.move(angle);
+ 		turret.move(amount);
  	}
  	
  	public void dispose()
@@ -177,5 +192,14 @@ public class GameComponent extends JComponent implements KeyListener
  		queue.clear();
  		removeList.clear();
  		frame.returnToMenu();
+ 	}
+ 	
+ 	public void endGame()
+ 	{
+ 		frame.timer.stop();
+ 		String name = (String)JOptionPane.showInputDialog(null, "Oh no, the Stickmen have taken over!\n" + "Your score was: " + score + "\nPlease enter your name:", "Game Over!", 0, null, null, "Player 1");
+ 		ScoreFrame temp = new ScoreFrame();
+ 		temp.addEntry(name, Integer.toString(score));
+ 		dispose();
  	}
  }

@@ -64,6 +64,8 @@ import java.util.Random;
  	public Bullet(int X, int Y, int a, GameComponent c)
  	{
  		super(X, Y, c);
+ 		//redefine the coord to where the barrel's tip is at
+ 		
  		angle = a;
  		double radian = Math.toRadians(angle);
  		speedX = hyp * Math.cos(radian);
@@ -101,7 +103,7 @@ import java.util.Random;
  			x = (int)(x + speedX);
 			y = (int)(y - speedY);
 		}
- 		System.out.println ("(" + x + ", " + y + ")");
+ 		//System.out.println ("(" + x + ", " + y + ")");
  		component.repaint();
  		
  		for (Entity e : component.getQueue())
@@ -123,7 +125,7 @@ import java.util.Random;
  		g = g2;
  		
  		Ellipse2D bullet = new Ellipse2D.Double(x, y, diameter, diameter);
- 		g.setColor(Color.black);
+ 		g.setColor(Color.red);
  		g.fill(bullet);
  	}
  	
@@ -267,10 +269,10 @@ import java.util.Random;
 	 					land();
 	 					y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
 	 					
-	 					if (x >= 200 && x <= 400) //if it lands on tank
+	 					if (x >= 200 && x <= 395) //if it lands on turet
 	 					{
-	 						component.dispose();
-	 						System.out.println("GAME OVER!");
+	 						//component.dispose();
+	 						component.endGame();
 	 					}
 	 				}
 	 			}
@@ -316,11 +318,16 @@ import java.util.Random;
  	{
  		speed = 0;
  		landed = true;
+ 		component.addLanded();
  	}
  	
  	public void die()
  	{
  		dead = true;
+ 		if (landed)
+ 		{
+ 			component.deductLanded();
+ 		}
  		component.addPoint();
  	}
  	
@@ -331,32 +338,59 @@ import java.util.Random;
  }
  
  
- class Tank extends Entity
+ class Turret extends Entity
  {
-	Shape test;
-	Ellipse2D body = new Ellipse2D.Double(200, 390, 200, 100);
+	Shape barrel;
+	Ellipse2D circ = new Ellipse2D.Double(301, 300, 10, 10);
+	Shape test = circ;
+	Ellipse2D body = new Ellipse2D.Double(200, 355, 200, 200);
+	Rectangle2D rect = new Rectangle2D.Double(300, 300, 12, 65);
 	int radius = 25;
+	int angle = 0;
 	
-	public Tank(int X, int Y, GameComponent c) 
+	public Turret(int X, int Y, GameComponent c)
 	{
 		super(X, Y, c);
+		x = test.getBounds().x;
+		y = test.getBounds().y;
 	}
 	
-	public void move(int angle)
+	public void move(int amount)
 	{
-		Rectangle2D rect = new Rectangle2D.Double(100, 100, 20, 200);
-		//Ellipse2D circ = new Ellipse2D.Double(100, 100, 50, 50);
-		AffineTransform at = AffineTransform.getRotateInstance(angle, 150, 150);
-		test = at.createTransformedShape(rect);
+		//Rectangle2D rect = new Rectangle2D.Double(300, 350, 10, 50);
+		//Ellipse2D circ = new Ellipse2D.Double(300, 350, 10, 10);
+		angle += amount;
+		AffineTransform transform = new AffineTransform();
+		double tempx = rect.getX() + rect.getWidth();
+		double tempy = rect.getY() + rect.getHeight();
+		transform.rotate(Math.toRadians(angle), tempx, tempy);
 		
+		barrel = transform.createTransformedShape(rect);
+		test = transform.createTransformedShape(circ);
+		x = test.getBounds().x;
+		y = test.getBounds().y;
+		
+		//System.out.println ("(" + test.getBounds().x + ", " + test.getBounds().y + ")");
 		component.repaint();
 	}
 	
 	public void draw(Graphics2D g2)
 	{
 		g = g2;
-		//g2.setColor(Color.black);
+		g2.setColor(Color.black);
 		g2.fill(body);
+		g2.setColor(Color.blue);
+		g2.fill(barrel);
+		g2.setColor(Color.green);
 		g2.fill(test);
+	}
+	
+	public int getBarrelX()
+	{
+		return x;
+	}
+	public int getBarrelY()
+	{
+		return y;
 	}
  }

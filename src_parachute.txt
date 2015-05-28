@@ -1,7 +1,7 @@
 "H:\\My Documents\\Github\\Parachute\\src\\Entities.java"
 "H:\\My Documents\\Github\\Parachute\\src\\GameComponent.java"
-"H:\\My Documents\\Github\\Parachute\\src\\GameFrame.java"
 "H:\\My Documents\\Github\\Parachute\\src\\HelpFrame.java"
 "H:\\My Documents\\Github\\Parachute\\src\\MainFrame.java"
 "H:\\My Documents\\Github\\Parachute\\src\\MainMenu.java"
 "H:\\My Documents\\Github\\Parachute\\src\\ParachuteRunner.java"
+"H:\\My Documents\\Github\\Parachute\\src\\ScoreFrame.java"
