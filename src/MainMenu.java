@@ -8,26 +8,38 @@ import java.awt.event.*;
 import java.awt.Graphics;
 
 import javax.swing.*;
-
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
-
-import java.io.File;
  
+/**
+  * Displays the Main Menu Frame
+  */
  @SuppressWarnings("serial")
 public class MainMenu extends JFrame implements ActionListener
  {
- 	public JButton startButton = new JButton("Start");
- 	public JButton helpButton = new JButton("Instructions");
- 	public JButton scoresButton = new JButton("Highscores");
  	
- 	private JPanel southPanel = new JPanel();
- 	private JPanel northPanel;
- 	BufferedImage logo;
+	 /** The start button. */
+	 public JButton startButton = new JButton("Start");
  	
- 	public MainMenu()
- 	{
+	 /** The help button. */
+	 public JButton helpButton = new JButton("Instructions");
+ 	
+	 /** The scores button. */
+	 public JButton scoresButton = new JButton("Highscores");
+ 	
+ 	/** The south panel. */
+	 private JPanel southPanel = new JPanel();
+ 	
+	 /** The north panel. */
+	 private JPanel northPanel;
+ 	
+	 /** The logo. */
+	 Image logo;
+ 	
+ 	/**
+	  * Instantiates a new main menu.
+	  * Gives the options to play, view instructions or highscores
+	  */
+	 public MainMenu()
+ 	{	
  		setSize(500, 400);
  		setTitle("Parachute -Main Menu-");
  		
@@ -53,30 +65,37 @@ public class MainMenu extends JFrame implements ActionListener
  		setVisible(true);
  	}
  	
- 	@SuppressWarnings("unused")
+ 	/**
+ 	 *Listens to actions performed 
+	 */
+	 @SuppressWarnings("unused")
 	public void actionPerformed(ActionEvent e)
  	{
- 		if (helpButton.equals(e.getSource()))
+ 		if (helpButton.equals(e.getSource())) //opens instructions frame
  		{
  			HelpFrame instructions = new HelpFrame();
  		}
- 		else if (startButton.equals(e.getSource()))
+ 		else if (startButton.equals(e.getSource())) //starts the main game
  		{
  			MainFrame main = new MainFrame();
  			dispose();
  		}
- 		else if (scoresButton.equals(e.getSource()))
+ 		else if (scoresButton.equals(e.getSource())) //opens the highscores
  		{
  			ScoreFrame main = new ScoreFrame();
  			main.start();
  		}
  	}
  	
- 	public void drawLogo()
+ 	/**
+	  * Draws the logo.
+	  */
+	 public void drawLogo()
  	{
  		try
  		{
- 			logo = ImageIO.read(new File("Logo.png"));
+ 			ImageIcon temp = new ImageIcon(getClass().getResource("Logo.png"));
+ 			logo = temp.getImage();//ImageIO.read(new File("Logo.png"));
  		}
  		catch (Exception e)
  		{

@@ -1,18 +1,19 @@
 /**
  *Entities.java
+ *Contains all the entity classes
  */
  
- import java.awt.*;
+import java.awt.*;
 import java.awt.geom.*;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 
-import javax.imageio.ImageIO;
-
-import java.io.File;
 import java.util.Random;
  
- 
+/**
+ * The Superclass.
+ *
+ */
  class Entity
  {
  	int x, y;
@@ -20,6 +21,12 @@ import java.util.Random;
  	GameComponent component;
  	boolean dead = false;
  	
+ 	/**
+ 	 * Constructs an Entity
+ 	 * @param X the entity's x position
+ 	 * @param Y the entity's y position
+ 	 * @param c the GameComponent
+ 	 */
  	public Entity(int X, int Y, GameComponent c)
  	{
  		x = X;
@@ -27,44 +34,71 @@ import java.util.Random;
  		component = c;
  	}
  	
+ 	/**
+ 	 * Moves the entity to its next position
+ 	 */
  	public void move()
  	{
  		//blank
  	}
  	
+ 	/**
+ 	 * Draws the entity
+ 	 * @param g2 The Graphics2D that draws it
+ 	 */
  	public void draw (Graphics2D g2)
  	{
  		
  	}
  	
- 	public void position() //debug. Prints the Entity's position
+ 	/**
+ 	 * Debug purposes
+ 	 * Prints the entity's position
+ 	 */
+ 	public void position()
  	{
  		System.out.println ("Position: " + x + ", " + y);
  	}
  	
+ 	/**
+ 	 * Tells the entity to die
+ 	 */
  	public void die()
  	{
  		//overwrite
  	}
  	
+ 	/**
+ 	 * Gets the bounds of the entity
+ 	 * @return the rectangle bounding the entity
+ 	 */
  	public Rectangle getBounds()
  	{
  		return new Rectangle(x, y, 0, 0);
  	}
  }
  
+ /**
+  * A circle that is fired out of the turret
+  */
  class Bullet extends Entity
  {
- 	double speedX;
- 	double speedY;
-	int angle;
+ 	double speedX; //x axis speed per update
+ 	double speedY; //y axis speed per update
+	int angle; //the angle it was fired at
 	int hyp = 15; //hypotenuse - distance the bullet travels per update
- 	int diameter = 10;
+ 	int diameter = 10; //diameter of the bullet
  	
+ 	/**
+ 	 * Constructs the bullet
+ 	 * @param X Initial x coord
+ 	 * @param Y Initial y coord
+ 	 * @param a Angle it was fired at
+ 	 * @param c GameComponent
+ 	 */
  	public Bullet(int X, int Y, int a, GameComponent c)
  	{
  		super(X, Y, c);
- 		//redefine the coord to where the barrel's tip is at
  		
  		angle = a;
  		double radian = Math.toRadians(angle);
@@ -72,17 +106,11 @@ import java.util.Random;
  		speedY = hyp * Math.sin(radian);
  	}
  	
+ 	/**
+ 	 * Changes coord to next position
+ 	 */
  	public void move()
  	{
- 		/*if (x <= 0 || x >= g.getClipBounds().getWidth() || y <= 0)
- 		{
- 			//dispose(); //removes the bullet when out of bounds
- 		}
- 		else
- 		{
- 			x += speedX;
- 			y += speedY;
- 		}*/
  		if (g == null)
 			return;
  		
@@ -103,7 +131,6 @@ import java.util.Random;
  			x = (int)(x + speedX);
 			y = (int)(y - speedY);
 		}
- 		//System.out.println ("(" + x + ", " + y + ")");
  		component.repaint();
  		
  		for (Entity e : component.getQueue())
@@ -120,6 +147,9 @@ import java.util.Random;
 			}
  	}
  	
+ 	/**
+ 	 * Draws the bullet
+ 	 */
  	public void draw(Graphics2D g2)
  	{
  		g = g2;
@@ -129,24 +159,39 @@ import java.util.Random;
  		g.fill(bullet);
  	}
  	
+ 	/**
+ 	 * Tells bullet to die
+ 	 */
  	public void die()
  	{
  		dead = true;
  	}
  	
+ 	/**
+ 	 * Gets the bounds surrounding the bullet
+ 	 */
  	public Rectangle getBounds()
  	{
  		return new Rectangle(x, y, diameter, diameter);
  	}
  }
  
+ /**
+  * Randomly generated positions and falls down to the ground.
+  */
  class Paratrooper extends Entity 
  {
- 	int speed; //falling speed, random
- 	boolean falling = false;
- 	boolean landed = false;
- 	BufferedImage fallingImg, parachuteImg; //width = 40, height = 56
+ 	int speed; //falling speed
+ 	boolean falling = false; //determines if it's falling
+ 	boolean landed = false; //determines if it landed
+ 	Image fallingImg, parachuteImg; //width = 40, height = 56 //images
  	
+ 	/**
+ 	 * Contructs a paratrooper
+ 	 * @param X the x position
+ 	 * @param Y the y position
+ 	 * @param c GameComponent
+ 	 */
  	public Paratrooper(int X, int Y, GameComponent c)
  	{
  		super(X, Y, c);
@@ -156,8 +201,8 @@ import java.util.Random;
  		
  		try
  		{
- 			parachuteImg = ImageIO.read(new File("Parachute.png"));
- 			fallingImg = ImageIO.read(new File("Falling.png"));
+ 			parachuteImg = new ImageIcon(getClass().getResource("Parachute.png")).getImage();//ImageIO.read(new File("Parachute.png"));
+ 			fallingImg = new ImageIcon(getClass().getResource("Falling.png")).getImage();//ImageIO.read(new File("Falling.png"));
  		}
  		catch (Exception e)
  		{
@@ -220,6 +265,9 @@ import java.util.Random;
  		}
  	}
  	
+ 	/**
+ 	 * Changes its position. Falls down.
+ 	 */
  	public void move()
  	{
  		if (!dead)
@@ -267,7 +315,7 @@ import java.util.Random;
 	 				else //landed safely
 	 				{
 	 					land();
-	 					y = (int)g.getClipBounds().getHeight()-fallingImg.getHeight();
+	 					y = (int)g.getClipBounds().getHeight()-56;
 	 					
 	 					if (x >= 200 && x <= 395) //if it lands on turet
 	 					{
@@ -291,7 +339,10 @@ import java.util.Random;
  		}
  	}
  	
- 	public void draw(Graphics2D g2) //draws the actual image
+ 	/**
+ 	 * Draws the image at its location
+ 	 */
+ 	public void draw(Graphics2D g2)
  	{
  		g = g2;
  		
@@ -304,16 +355,25 @@ import java.util.Random;
  			g2.drawImage(parachuteImg,x, y, null);
  	}
  	
+ 	/**
+ 	 * Debug purposes. Prints its position
+ 	 */
  	public void position()
  	{
  		System.out.println ("Paratrooper's position: " + x + ", " + y);
  	}
  	
+ 	/**
+ 	 * Tells it to fall
+ 	 */
  	public void fall()
  	{
  		falling = true;
  	}
  	
+ 	/**
+ 	 * Tells it to land.
+ 	 */
  	public void land()
  	{
  		speed = 0;
@@ -321,6 +381,9 @@ import java.util.Random;
  		component.addLanded();
  	}
  	
+ 	/**
+ 	 * Tells it to die, adds a point to score
+ 	 */
  	public void die()
  	{
  		dead = true;
@@ -331,6 +394,9 @@ import java.util.Random;
  		component.addPoint();
  	}
  	
+ 	/**
+ 	 * Gets the rectangle bounding it
+ 	 */
  	public Rectangle getBounds()
  	{
  		return new Rectangle(x, y, 40, 56);
@@ -338,11 +404,14 @@ import java.util.Random;
  }
  
  
+ /**
+  *Body is a semi circle, barrel is a rectangle and shoots bullets
+  */
  class Turret extends Entity
  {
 	Shape barrel;
-	Ellipse2D circ = new Ellipse2D.Double(301, 300, 10, 10);
-	Shape test = circ;
+	Ellipse2D circ = new Ellipse2D.Double(301, 300, 10, 10); //shape and position of the bullet
+	Shape test = circ; //used to check bullet position
 	Ellipse2D body = new Ellipse2D.Double(200, 355, 200, 200);
 	Rectangle2D rect = new Rectangle2D.Double(300, 300, 12, 65);
 	int radius = 25;
@@ -355,10 +424,12 @@ import java.util.Random;
 		y = test.getBounds().y;
 	}
 	
+	/**
+	 * Rotates the barrel/rectangle
+	 * @param amount Amount of degrees shifted
+	 */
 	public void move(int amount)
 	{
-		//Rectangle2D rect = new Rectangle2D.Double(300, 350, 10, 50);
-		//Ellipse2D circ = new Ellipse2D.Double(300, 350, 10, 10);
 		angle += amount;
 		AffineTransform transform = new AffineTransform();
 		double tempx = rect.getX() + rect.getWidth();
@@ -374,6 +445,9 @@ import java.util.Random;
 		component.repaint();
 	}
 	
+	/**
+	 * Draws the position of the barrel
+	 */
 	public void draw(Graphics2D g2)
 	{
 		g = g2;
@@ -385,10 +459,19 @@ import java.util.Random;
 		g2.fill(test);
 	}
 	
+	/**
+	 * Gets the barrel's x position
+	 * @return x position
+	 */
 	public int getBarrelX()
 	{
 		return x;
 	}
+	
+	/**
+	 * Gets the barrel's y position
+	 * @return y position
+	 */
 	public int getBarrelY()
 	{
 		return y;

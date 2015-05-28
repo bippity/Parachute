@@ -5,23 +5,35 @@
 import java.awt.Dimension;
 import java.awt.Toolkit; 
 import java.util.*;
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
 
+import javax.swing.*;
+
+import java.io.File;
+import java.io.PrintWriter;
+
+/**
+ * The Highscores Frame.
+ */
+@SuppressWarnings("serial")
 public class ScoreFrame extends JFrame
 {
+	
+	/** The scanner. */
 	Scanner scan;
+	
+	/** The scores.dat file. */
 	File file = new File("scores.dat");
+	
+	/** The priority queue of scores. */
 	PriorityQueue<Node> queue = new PriorityQueue<Node>(10, new Comparator<Node>() {
 		public int compare(Node n1, Node n2)
 		{
 			return n2.getScore()-n1.getScore();
 		}});
 	
+	/**
+	 * Instantiates a new highscores frame.
+	 */
 	public ScoreFrame()
 	{
 		setSize(400, 400);
@@ -41,6 +53,9 @@ public class ScoreFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Decrypts the scores from scores.dat and displays them in html format
+	 */
 	public void start()
 	{
 		try
@@ -98,6 +113,12 @@ public class ScoreFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Encrypts and Adds a score entry into scores.dat
+	 *
+	 * @param player the player
+	 * @param score the player's score
+	 */
 	public void addEntry(String player, String score)
 	{
 		PrintWriter writer = null;
@@ -138,22 +159,38 @@ public class ScoreFrame extends JFrame
 	}
 }
 
+/**
+ * The Node that contains the player's name and score 
+ */
 class Node
 {
 	private String name;
 	private int score;
 	
+	/**
+	 * Constructs a Node
+	 * @param name the player's name
+	 * @param score the player's score
+	 */
 	public Node(String name, int score)
 	{
 		this.name = name;
 		this.score = score;
 	}
 	
+	/**
+	 * Gets the player's name
+	 * @return name the player's name
+	 */
 	public String getName()
 	{
 		return name;
 	}
 	
+	/**
+	 * Gets the player's score
+	 * @return score the player's score
+	 */
 	public int getScore()
 	{
 		return score;

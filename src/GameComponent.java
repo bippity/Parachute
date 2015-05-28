@@ -1,6 +1,6 @@
 /**
  *GameComponent.java
- *Has to draw all entities
+ *Draws all entities
  */
  
 import java.awt.event.*;
@@ -12,28 +12,54 @@ import javax.swing.*;
 
 import java.util.*;
  
+/**
+  * The GameComponent.
+  */
  @SuppressWarnings("serial")
 public class GameComponent extends JComponent implements KeyListener
  {
- 	private MainFrame frame;
- 	private int angle = 90;
- 	int count = 0;
- 	int score = 0;
- 	private LinkedList<Entity> queue = new LinkedList<Entity>();
- 	private ArrayList<Entity> removeList = new ArrayList<Entity>();
- 	private int landed = 0;
  	
- 	private Turret turret = new Turret(200, 400, this);
+	 /** The frame. */
+	 private MainFrame frame;
+ 	
+	 /** The angle. */
+	 private int angle = 90;
+ 	
+	 /** The count. */
+	 int count = 0;
+ 	
+	 /** The score. */
+	 int score = 0;
+ 	
+	 /** The queue. */
+	 private LinkedList<Entity> queue = new LinkedList<Entity>();
+ 	
+	 /** The remove list. */
+	 private ArrayList<Entity> removeList = new ArrayList<Entity>();
+ 	
+	 /** The landed. */
+	 private int landed = 0;
+ 	
+ 	/** The turret. */
+	 private Turret turret = new Turret(200, 400, this);
  	
  	
- 	public GameComponent(MainFrame m) //constructor
+ 	/**
+	  * Instantiates a new game component.
+	  *
+	  * @param m the MainFrame
+	  */
+	 public GameComponent(MainFrame m) //constructor
  	{
  		frame = m;
  		setFocusable(true);
  		addKeyListener(this);
  	}
  	
- 	public void start()
+ 	/**
+	  * Generates the paratroopers and draws the tank.
+	  */
+	 public void start()
  	{
  		//draw the turret first
  		updateTurret(0);
@@ -41,7 +67,10 @@ public class GameComponent extends JComponent implements KeyListener
  		generateEntities();
  	}
  	
- 	public void update() //updates the position of entities. Tick is 100ms
+ 	/**
+	  * Redraws all the entities
+	  */
+	 public void update() //updates the position of entities. Tick is 100ms
  	{
  		count++;
  		//System.out.println ("Updated " + count);
@@ -77,7 +106,10 @@ public class GameComponent extends JComponent implements KeyListener
  		//frame.setQueue(landed);//Debug
  	}
  	
- 	public void paintComponent(Graphics g)
+ 	/**
+ 	 * Paints the entities
+ 	 */
+	 public void paintComponent(Graphics g)
  	{
  		Graphics2D g2 = (Graphics2D) g;
  		
@@ -88,7 +120,11 @@ public class GameComponent extends JComponent implements KeyListener
  		}
  	}
  	
- 	public void generateEntities()
+ 	/**
+	  * Generate entities.
+	  * If less than 15 entities are in the queue, it generates a paratrooper
+	  */
+	 public void generateEntities()
  	{
  		if (queue.size() < 15)
  		{
@@ -97,7 +133,10 @@ public class GameComponent extends JComponent implements KeyListener
  		}
  	}
  	
- 	public void keyPressed(KeyEvent e) //space = 32, A = 65, D = 68, Left = 37, Right = 39
+ 	/**
+ 	 * Listens to keys pressed 
+	 */
+	 public void keyPressed(KeyEvent e) //space = 32, A = 65, D = 68, Left = 37, Right = 39
  	{
  		int keyCode = e.getKeyCode();
  		
@@ -137,20 +176,28 @@ public class GameComponent extends JComponent implements KeyListener
  		}
  	}
  	
- 	public void keyReleased(KeyEvent e)
+ 	//Overridden
+	 public void keyReleased(KeyEvent e)
  	{
  	}
- 	public void keyTyped(KeyEvent e)
+	 //Overridden
+	 public void keyTyped(KeyEvent e)
  	{
  	}
  	
- 	public void addPoint()
+ 	/**
+	  * Adds a point to the score.
+	  */
+	 public void addPoint()
  	{
  		score++;
  		frame.setScore(score);
  	}
  	
- 	public void addLanded()
+ 	/**
+	  * Increments the amount of paratroopers that landed by 1
+	  */
+	 public void addLanded()
  	{
  		landed++;
  		if (landed == 5)
@@ -159,7 +206,10 @@ public class GameComponent extends JComponent implements KeyListener
  		}
  	}
  	
- 	public void deductPoint()
+ 	/**
+	  * Deducts a point from the score.
+	  */
+	 public void deductPoint()
  	{
  		if (score > 0)
  			score--;
@@ -167,39 +217,70 @@ public class GameComponent extends JComponent implements KeyListener
  		frame.setScore(score);
  	}
  	
- 	public void deductLanded()
+ 	/**
+	  * Deducts the amount of paratroopers that landed by 1.
+	  */
+	 public void deductLanded()
  	{
  		landed--;
  	}
  	
- 	public LinkedList<Entity> getQueue()
+ 	/**
+	  * Gets the queue of entities.
+	  *
+	  * @return the queue
+	  */
+	 public LinkedList<Entity> getQueue()
  	{
  		return queue;
  	}
  	
- 	public void removeTroop(Paratrooper p)
+ 	/**
+	  * Removes the paratrooper from the queue after dying.
+	  *
+	  * @param p the paratrooper
+	  */
+	 public void removeTroop(Paratrooper p)
  	{
  		queue.remove(p);
  	}
  	
- 	public void updateTurret(int amount)
+ 	/**
+	  * Updates turret's position.
+	  *
+	  * @param amount the amount of degrees
+	  */
+	 public void updateTurret(int amount)
  	{
  		turret.move(amount);
  	}
  	
- 	public void dispose()
+ 	/**
+	  * Disposes/clears everything and returns to main menu
+	  */
+	 public void dispose()
  	{
  		queue.clear();
  		removeList.clear();
  		frame.returnToMenu();
  	}
  	
- 	public void endGame()
+ 	/**
+	  * Ends the game. Player died, prompts for name and returns to main menu.
+	  */
+	 public void endGame()
  	{
  		frame.timer.stop();
  		String name = (String)JOptionPane.showInputDialog(null, "Oh no, the Stickmen have taken over!\n" + "Your score was: " + score + "\nPlease enter your name:", "Game Over!", 0, null, null, "Player 1");
- 		ScoreFrame temp = new ScoreFrame();
- 		temp.addEntry(name, Integer.toString(score));
- 		dispose();
+ 		if (name == null)
+ 		{
+ 			dispose();
+ 		}
+ 		else 
+ 		{
+	 		ScoreFrame temp = new ScoreFrame();
+	 		temp.addEntry(name, Integer.toString(score));
+	 		dispose();
+ 		}
  	}
  }
